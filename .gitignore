@@ -1,0 +1,10 @@
+# Ignore node_modules (default)
+node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore uploads
+uploads/
+
+eng.traineddata
