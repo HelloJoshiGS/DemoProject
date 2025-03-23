@@ -6,6 +6,9 @@ Test basic server setup with a sample route
 Install dotenv for managing sensitive credentials (e.g., API keys)
 
 Create a .env file to store sensitive credentials
-Username = ghanshyamjoshi
-password = ToWELdbFgz6VsjGR
-URL = mongodb+srv://ghanshyamjoshi:ToWELdbFgz6VsjGR@cluster0.m3fpi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+
+PORT=5000
+DATABASE_URL=MongoDB Credential
+JWT_SECRET=secretKey
+ANTHROPIC_API_KEY=APIKEY
