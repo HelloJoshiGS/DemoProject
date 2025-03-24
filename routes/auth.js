@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(409).json({ error: 'Username already taken' }); // 409 = Conflict
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
@@ -43,6 +43,12 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+// Logout User (Not Implemented)
+router.post('/logout', (req, res) => {
+  
+  res.status(200).json({ message: 'Logout successful' });
 });
 
 module.exports = router;
