@@ -69,7 +69,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }
   });
 
-// Update Expense
+
 // Update Expense
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
@@ -103,6 +103,40 @@ router.put('/:id', authMiddleware, async (req, res) => {
     errorHandler(res, error, 'Failed to update expense');
   }
 });
+
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const { startDate, endDate, sortBy, ...rest } = req.query;
+    let filter = { user: req.user.id };
+
+    // Handle date range filtering
+    if (startDate || endDate) {
+      filter.date = {};
+      if (startDate) filter.date.$gte = new Date(startDate);
+      if (endDate) filter.date.$lte = new Date(endDate);
+    }
+
+    // Add dynamic filters for other fields
+    for (let key in rest) {
+      // Convert amount to number for comparison
+      if (key === 'amount') {
+        filter[key] = Number(rest[key]);
+      } else {
+        filter[key] = rest[key];
+      }
+    }
+
+    // Optional sorting
+    let sortOption = sortBy === 'amount' ? { amount: 1 } : { date: -1 };
+
+    const expenses = await Expense.find(filter).sort(sortOption);
+    res.json({ message: 'Expenses retrieved successfully', expenses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve expenses' });
+  }
+});
+
 
 
 
