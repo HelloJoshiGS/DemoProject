@@ -77,6 +77,14 @@ router.put('/:id', authMiddleware, async (req, res) => {
     const allowedFields = ['type', 'amount', 'category', 'date', 'description'];
     const updateData = {};
 
+    if ('amount' in req.body) {
+      const parsedAmount = Number(req.body.amount);
+      if (isNaN(parsedAmount) || parsedAmount <= 0) {
+        return res.status(400).json({ error: 'Amount must be a positive number' });
+      }
+    }
+    
+
     for (const key of allowedFields) {
       if (key in req.body) {
         updateData[key] = req.body[key];

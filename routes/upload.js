@@ -28,10 +28,16 @@ router.post('/', authMiddleware, upload.single('file'), async (req, res) => {
     } else {
       extractedText = (await Tesseract.recognize(file.path, 'eng')).data.text;
     }
-
+    if (!extractedText || extractedText.trim().length < 10) {
+      return res.status(400).json({ error: 'Image/pdf did not contain valid text.' });
+    }
+    
     // Process text using LLM
     let structuredDataRaw = await processTextWithLLM(extractedText);
+    // console.log('structuredDataRaw type:', typeof structuredDataRaw);
+    // console.log('structuredDataRaw content:', structuredDataRaw);
     structuredDataRaw = structuredDataRaw.replace(/```json|```/g, '').trim();
+    console.log('structuredDataRaw content:', structuredDataRaw);
 
     let parsedData;
     try {
