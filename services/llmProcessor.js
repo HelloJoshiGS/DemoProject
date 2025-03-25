@@ -33,6 +33,9 @@ Rules:
 - Do not return markdown (\`\`\`)
 - Return only the array of JSON objects
 - Group related items into a single object if found on the same list/page
+- If the text is unrelated or unrecognizable, return an empty array []
+- Do NOT guess if it's not obvious
+- Do NOT add unrelated or imaginary entries
 
 TEXT:
 ${text}
