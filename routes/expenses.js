@@ -8,7 +8,7 @@ const rateLimit = require('express-rate-limit');
 // Rate Limiting
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per window
+    max: 1000, // Limit each IP to 100 requests per window
     message: { error: 'Too many requests, please try again later.' }
   });
   
@@ -46,8 +46,18 @@ router.post('/', authMiddleware, async (req, res) => {
 // Get Expenses with Filters
 router.get('/', authMiddleware, async (req, res) => {
     try {
-      const { startDate, endDate, category, sortBy } = req.query;
+      const { startDate, endDate, category, amount, sortBy } = req.query;
       let filter = { user: req.user.id };
+      
+      // Added filter for amount
+      if (amount && !isNaN(amount)) {
+        filter.amount = Number(amount);
+      }
+      
+
+      console.log("This is filter: " + filter.amount);
+
+      // Handles date range filtering
       if (startDate && endDate) {
         filter.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
       }
